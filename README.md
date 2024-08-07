@@ -12,7 +12,6 @@ This repository contains the code used in the research paper titled **"Developme
 - [Usage](#usage)
 - [Results](#results)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 This project investigates the effectiveness of various clustering algorithms in analyzing meteorological data to improve Automatic Identification System (AIS)-based ship arrival time predictions in inland waterway transport (IWT). The weather patterns were grouped using different clustering methods, and their performance was evaluated using the Silhouette Score. The findings of this research are detailed in the associated research paper.
@@ -52,9 +51,6 @@ The code evaluates the performance of different clustering algorithms (KMeans, D
 
 ## Contributing
 Contributions to this project are welcome. If you have suggestions or improvements, feel free to create a pull request or open an issue.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
 
 ### Additional Notes:
 - Replace `clustering_analysis.py` with the actual name of your main Python script file if it differs.
