@@ -37,10 +37,9 @@ To run the code in this repository, you need to have Python v3 installed along w
 - umap-learn
 
 ## Usage
-Prepare the Data:
-1. Place all raw KNMI weather data files in the Data_KNMI folder.
-2. Run the Clustering Analysis:
-3. Execute the clustering_analysis.py script to process the data and perform clustering analysis.
+1. Prepare the Data: Place all raw KNMI weather data files in the Data_KNMI folder.
+2. Run the Clustering Analysis: Execute the clustering_analysis.py script to process the data and perform clustering analysis.
+3. Read the estimated eps value from the "K-Nearest Neighbors Distance" plot and enter into the console prompt. ( eps = 2.75 used for provided KNMI_Data )
 4. View Results: The clustering results and weather index rankings are saved in the weather_clusters.csv file. Visualizations of the clustering results using PCA, t-SNE, and UMAP are displayed as plots.
 
 ## Results
