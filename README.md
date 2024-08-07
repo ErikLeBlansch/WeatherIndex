@@ -17,7 +17,7 @@ This repository contains the code used in the research paper titled **"Developme
 This project investigates the effectiveness of various clustering algorithms in analyzing meteorological data to improve Automatic Identification System (AIS)-based ship arrival time predictions in inland waterway transport (IWT). The weather patterns were grouped using different clustering methods, and their performance was evaluated using the Silhouette Score. The findings of this research are detailed in the associated research paper.
 
 ## Data Source
-The meteorological data used in this research was obtained from the Koninklijk Nederlands Meteorologisch Instituut (KNMI). The data can be accessed at the following link:
+The meteorological data used in this research was obtained from the Koninklijk Nederlands Meteorologisch Instituut (KNMI). The data can be accessed via the following link:
 [KNMI Climate Data](https://www.knmi.nl/nederland-nu/klimatologie/daggegevens)
 
 ## Repository Structure
@@ -28,7 +28,7 @@ The meteorological data used in this research was obtained from the Koninklijk N
 - weather_clusters.csv # Output file with clustering results
 
 ## Installation
-To run the code in this repository, you need to have Python 3 installed along with the following libraries:
+To run the code in this repository, you need to have Python v3 installed along with the following libraries:
 - pandas
 - numpy
 - scikit-learn
@@ -48,8 +48,3 @@ The code evaluates the performance of different clustering algorithms (KMeans, D
 
 ## Contributing
 Contributions to this project are welcome. If you have suggestions or improvements, feel free to create a pull request or open an issue.
-
-### Additional Notes:
-- Replace `clustering_analysis.py` with the actual name of your main Python script file if it differs.
-- Ensure that the `Data_KNMI` folder and example data files are included in your repository for reference.
-- If there are any additional scripts or notebooks, include them in the `Repository Structure` section.
