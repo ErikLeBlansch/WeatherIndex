@@ -303,7 +303,7 @@ for method in methods:
     summary.columns = ['max Wind Gust', 'mean Temperature', 'max Precipitation', 'min Pressure', 'min Visibility']
     summary['Weather Index'] = grouped['Weather Index']
 
-    cluster_summary[method] = summary.sort_values(by 'Weather Index')
+    cluster_summary[method] = summary.sort_values(by='Weather Index')
 
 # Adjust units by dividing specific columns by 10
 for method, summary in cluster_summary.items():
