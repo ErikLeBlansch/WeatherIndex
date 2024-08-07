@@ -23,12 +23,9 @@ The meteorological data used in this research was obtained from the Koninklijk N
 ## Repository Structure
 - README.md # This README file
 - clustering_analysis.py # Main Python script for data processing and clustering analysis
-- Data_KNMI # Folder containing the raw KNMI weather data files
-- KNMI_data.csv # Cleaned weather data
+- Data_KNMI.zip # Folder containing the raw KNMI weather data .txt files
+- KNMI_data_cleaned.zip # Cleaned weather_data.csv
 - weather_clusters.csv # Output file with clustering results
-
-
-
 
 ## Installation
 To run the code in this repository, you need to have Python 3 installed along with the following libraries:
