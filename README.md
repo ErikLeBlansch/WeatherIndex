@@ -1,5 +1,5 @@
 # WeatherIndex
-Development of a Weather Severity Index to Improve AIS-Based Ship Arrival Time Predictions in Inland Waterway Transport
+Development of a Weather Severity Index to Improve AIS-Based Ship Arrival Time Predictions for Inland Waterway Transport (IWT),
 
 # Development of a Weather Severity Index to Improve AIS-Based Ship Arrival Time Predictions in Inland Waterway Transport
 This repository contains the code used in the research paper titled **"Development of a Weather Severity Index to Improve AIS-Based Ship Arrival Time Predictions in Inland Waterway Transport"**. The study aims to enhance the accuracy of ship arrival time predictions by incorporating weather severity indices derived from meteorological data.
