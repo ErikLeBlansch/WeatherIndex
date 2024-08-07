@@ -4,26 +4,14 @@ Created on Mon Jul 15 22:43:36 2024
 
 @author: erikleblansch
 """
-
 import pandas as pd
 import os
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
-from sklearn.mixture import GaussianMixture
-from sklearn.metrics import silhouette_score
-from sklearn.neighbors import NearestNeighbors
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-import umap
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-# Set the main path and change the working directory
+# Define the main path (change '<MAIN_PATH>' to your actual main path)
 main_path = '<MAIN_PATH>'
 os.chdir(main_path)
 
-# Define the folder path for KNMI data
+# Define the folder path containing the data files
 folder_path = os.path.join(main_path, 'Data_KNMI')
 
 # List all files in the folder
@@ -41,7 +29,7 @@ for file in files:
 # Combine all dataframes into a single dataframe
 KNMI_data = pd.concat(dataframes, ignore_index=True)
 
-# Set column names
+# Set column names (adjust based on actual data structure if necessary)
 column_names = [
     'STN', 'YYYYMMDD', 'HH', 'Windrichting (in graden)', 'Uurgemiddelde windsnelheid (in 0.1 m/s)', 'Windsnelheid (in 0.1 m/s)', 
     'Hoogste windstoot (in 0.1 m/s)', 'Temperatuur (in 0.1 graden Celsius)', 'Minimumtemperatuur (in 0.1 graden Celsius)', 
@@ -77,8 +65,13 @@ KNMI_data = KNMI_data[KNMI_data['HH'].isin(valid_hours)]
 KNMI_data['YYYYMMDD_HH'] = pd.to_datetime(KNMI_data['YYYYMMDD'] + KNMI_data['HH'], format='%Y%m%d%H', errors='coerce')
 KNMI_data.set_index('YYYYMMDD_HH', inplace=True)
 
-# Drop unnecessary columns
-KNMI_data.drop(columns=['YYYYMMDD', 'HH'], inplace=True)
+# Define columns to drop
+columns_to_drop = ['YYYYMMDD', 'HH']  # 'STN' removed from the list
+
+# Drop columns if they exist in DataFrame
+for column in columns_to_drop:
+    if column in KNMI_data.columns:
+        KNMI_data.drop(column, axis=1, inplace=True)
 
 # Save the cleaned data
 KNMI_data.to_csv('KNMI_data.csv')
@@ -86,7 +79,23 @@ KNMI_data.to_csv('KNMI_data.csv')
 # Print the first few rows to confirm
 print(KNMI_data.head())
 
-# Load the cleaned DataFrame
+#%%
+
+import os
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
+from sklearn.mixture import GaussianMixture
+from sklearn.metrics import silhouette_score
+from sklearn.neighbors import NearestNeighbors
+import matplotlib.pyplot as plt
+
+# Set the main path and change the working directory
+main_path = '<MAIN_PATH>'
+os.chdir(main_path)
+
+# Load the DataFrame
 weather_table = pd.read_csv('KNMI_data.csv')
 weather_table.replace([np.inf, -np.inf], np.nan, inplace=True)
 weather_table.dropna(inplace=True)
@@ -117,7 +126,6 @@ def optimize_clusters_kmeans(X, max_clusters=30):
             best_kmeans = kmeans
     return best_k, best_kmeans, best_score, silhouette_scores
 
-# Optimize KMeans clustering
 optimal_k, best_kmeans_model, best_silhouette_score_kmeans, kmeans_silhouettes = optimize_clusters_kmeans(data_scaled)
 weather_table['Cluster_KMeans'] = best_kmeans_model.labels_
 
@@ -129,7 +137,7 @@ neighbors = NearestNeighbors(n_neighbors=5)
 neighbors_fit = neighbors.fit(data_scaled)
 distances, indices = neighbors_fit.kneighbors(data_scaled)
 
-# Sort the distances and plot
+# Sort the distances
 distances = np.sort(distances, axis=0)
 distances = distances[:, 1]  # Take the distance to the closest point
 plt.plot(distances[::-1])  # Reverse to sort from largest to smallest
@@ -141,7 +149,7 @@ plt.show()
 # Prompt user to input the optimal eps observed from the plot
 eps_value = float(input("Enter the estimated eps value from the plot: "))
 
-# DBSCAN clustering using the optimized eps
+# Continue with DBSCAN clustering using the optimized eps value
 dbscan = DBSCAN(eps=eps_value, min_samples=3)
 dbscan_labels = dbscan.fit_predict(data_scaled)
 silhouette_score_dbscan = silhouette_score(data_scaled, dbscan_labels) if len(set(dbscan_labels)) > 1 else -1
@@ -184,7 +192,35 @@ print(comparison_table)
 # Save the updated DataFrame with cluster labels
 weather_table.to_csv('weather_clusters.csv')
 
-# Dimensionality reduction and visualization
+#%%
+
+import os
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+import umap
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set the main path and change the working directory
+main_path = '<MAIN_PATH>'
+os.chdir(main_path)
+
+# Load the DataFrame
+weather_table = pd.read_csv('weather_clusters.csv')
+weather_table.replace([np.inf, -np.inf], np.nan, inplace=True)
+weather_table.dropna(inplace=True)
+
+# Detect numeric features for clustering
+numeric_features = weather_table.select_dtypes(include=[np.number]).columns.tolist()
+data = weather_table[numeric_features]
+
+# Scale the data
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(data)
+
 # PCA for dimensionality reduction
 pca = PCA(n_components=2)
 pca_result = pca.fit_transform(data_scaled)
@@ -225,7 +261,10 @@ for method in methods:
     print(cluster_stats[method])
     print("\n")  # Adding a newline for better readability between methods
 
-# Calculate rankings and extremity scores
+#%%
+import pandas as pd
+
+cluster_stats = {}
 cluster_summary = {}
 
 for method in methods:
@@ -264,7 +303,7 @@ for method in methods:
     summary.columns = ['max Wind Gust', 'mean Temperature', 'max Precipitation', 'min Pressure', 'min Visibility']
     summary['Weather Index'] = grouped['Weather Index']
 
-    cluster_summary[method] = summary.sort_values(by='Weather Index')
+    cluster_summary[method] = summary.sort_values(by 'Weather Index')
 
 # Adjust units by dividing specific columns by 10
 for method, summary in cluster_summary.items():
